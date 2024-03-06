@@ -90,13 +90,15 @@ class Game {
   }
 
   // Method to end the game with a message
-  endGame(msg) {
+  endGame() {
     this.gameOver = true;
-    alert(msg);
+    const winnerMessage = this.currPlayer === this.player1
+      ? "Player 1 won!"
+      : "Player 2 won!";
+    alert(winnerMessage);
   }
 
   // Method to handle a player's move
-  // THIS FUNCTION IS RETURNING A CONSOLE ERROR THAT I CANT FIGURE OUT
   handleClick(evt) {
     console.log("Before click - Current Player:", this.currPlayer);
     if (this.gameOver) {
@@ -114,7 +116,6 @@ class Game {
     console.log("Selected spot:", { x, y });
   
     // Check if this.currPlayer is null or undefined
-    // ERROR IS RETURNING THIS LINE
     if (!this.currPlayer) {
       console.error("Error: Current player is null or undefined");
       return;
@@ -126,7 +127,10 @@ class Game {
     this.placeInTable(y, x);
   
     if (this.checkForWin()) {
-      return this.endGame(`Player ${this.currPlayer.color} won!`);
+      const winnerMessage = this.currPlayer === this.player1
+      ? "Player 1 won!"
+      : "Player 2 won!";
+      return this.endGame(winnerMessage);
     }
   
     if (this.board.every(row => row.every(cell => cell))) {
@@ -176,7 +180,8 @@ class Game {
   // Method to set up the event listener for the "Start Game" button
   setupStartButton() {
   const startButton = document.getElementById('start-game');
-  startButton.addEventListener('click', () => {
+  startButton.addEventListener('click', (e) => {
+    e.preventDefault();
     this.setupPlayers();
     this.resetGame();
   });
